@@ -1,0 +1,69 @@
+debug: true
+
+server:
+  port: 9001
+
+test-ui: http://localhost/ui/
+test-home-page: http://localhost/
+uaa: http://localhost:9999/uaa
+
+spring:
+  aop:
+    proxy-target-class: true
+
+security:
+  oauth2:
+    client:
+      accessTokenUri: http://localhost:9999/uaa/oauth/token
+      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+
+zuul:
+  routes:
+    retrieval:
+      path: /retrieval/**
+      url: http://localhost:9002
+    users:
+      path: /users/**
+      url: http://localhost:9999/uaa/users
+    user:
+      path: /user/**
+      url: http://localhost:9999/uaa/user
+
+logging:
+  file: ./test-api.log
+  level:
+    com.cecdat.test: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
+server.port=9999
+server.contextPath=/uaa
+
+logging.file=./uaa.log
+logging.level.com.example.test=INFO
+logging.level.org.springframework.security=DEBUG
+logging.level.com.example.test.uaa.configuration=DEBUG
+
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.url=jdbc:h2:mem:test-user
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+
+spring.h2.console.enabled=true
+
+liquibase.change-log=classpath:/db/changelog/db.changelog-master.xml
+
+test-home-page=http://localhost/
+
+ldap.contextSource.url=ldap://xx.xx.xx.xx:xxxx/
+ldap.contextSource.rootDn=dc=example,dc=com
+ldap.contextSource.base=dc=example,dc=com
+ldap.contextSource.userDn=cn=Manager,dc=example,dc=com
+ldap.contextSource.password=xxxxx
